@@ -1,24 +1,24 @@
 {
-    "name": "buonzz/composer-library-template",
-    "description": "Boilerplate package for creating other packages.",
-    "keywords": ["template", "composer", "package"],
-    "license": "DBAD",
+    "name": "nrhoffmann/tarich",
+    "description": "a Jewish calender",
+    "keywords": ["jewish", "calender"],
+    "license": "MIT",
     "authors": [
         {
-            "name": "Darwin Biler",
-            "email": "buonzz@gmail.com"
+            "name": "Nathan Hoffmann",
+            "email": "nathanrosshoffmann@gmail.com"
         }
     ],
     "type": "project",
     "require": {
-		"php": ">=5.4"
+		"php": ">=5.5"
     },
 	"require-dev": {
 		"phpunit/phpunit": "5.2.*"
     },
 	"autoload": {
         "psr-4": {
-            "Buonzz\\Template\\": "src/"
+            "Nrhoffmann\\Tarich\\": "src/"
         }
     }
 }

@@ -1,4 +1,4 @@
-<?php namespace Buonzz\Template;
+<?php namespace Nrhoffmann\Tarich;
 
 /**
 *  A sample class
