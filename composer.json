@@ -1,5 +1,5 @@
 {
-    "name": "nrhoffmann/tarich",
+    "name": "nrhoffmann/hillel",
     "description": "a Jewish calender",
     "keywords": ["jewish", "calender"],
     "license": "MIT",
@@ -11,17 +11,18 @@
     ],
     "type": "project",
     "require": {
-		"php": ">=7.1"
+		"php": ">=7.1",
+        "php-coveralls/php-coveralls": "^2.0"
     },
 	"require-dev": {
 		"phpunit/phpunit": "^7.0"
     },
 	"autoload": {
         "psr-4": {
-            "Nrhoffmann\\Tarich\\": "src/"
+            "NRHoffmann\\Hillel\\": "src/"
         },
         "files": [
-            "src/constants/calender.php"
+            "src/constants/luach.php"
         ]
     }
 }

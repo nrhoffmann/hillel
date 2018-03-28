@@ -1,4 +1,4 @@
-<?php namespace Nrhoffmann\Tarich;
+<?php namespace NRHoffmann\Hillel;
 
 /**
 *  A sample class
