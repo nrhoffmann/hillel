@@ -39,7 +39,7 @@ final class Tarich
         return new Tarich($month, $day, $year);
     }
 
-    public function createGorgarian($month, $day, $year): Tarich
+    public static function createGorgarian($month, $day, $year): Tarich
     {
         $julianDayNumber  = gregoriantojd($month, $day, $year);
         $jewishDateString = jdtojewish($julianDayNumber);
@@ -256,7 +256,7 @@ final class Tarich
                 && $this->day === 23;
         }
 
-        return Luach::isSheminiAzeret($this);
+        return $this->isSheminiAzeret();
     }
 
     public function isSheminiAzeret(): bool
