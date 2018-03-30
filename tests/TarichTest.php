@@ -60,50 +60,59 @@ class TarichTest extends TestCase
 
     public function testIsSunday()
     {
-        $tarich = $tarich = Tarich::createGorgarian(3, 25, 2018);
+        $tarich = Tarich::createGorgarian(3, 25, 2018);
 
         $this->assertTrue($tarich->isSunday());
     }
 
     public function testIsMonday()
     {
-        $tarich = $tarich = Tarich::createGorgarian(3, 26, 2018);
+        $tarich = Tarich::createGorgarian(3, 26, 2018);
 
         $this->assertTrue($tarich->isMonday());
     }
 
     public function testIsTuesday()
     {
-        $tarich = $tarich = Tarich::createGorgarian(3, 27, 2018);
+        $tarich = Tarich::createGorgarian(3, 27, 2018);
 
         $this->assertTrue($tarich->isTuesday());
     }
 
     public function testIsWednesday()
     {
-        $tarich = $tarich = Tarich::createGorgarian(3, 28, 2018);
+        $tarich = Tarich::createGorgarian(3, 28, 2018);
 
         $this->assertTrue($tarich->isWednesday());
     }
 
     public function testIsThursday()
     {
-        $tarich = $tarich = Tarich::createGorgarian(3, 29, 2018);
+        $tarich = Tarich::createGorgarian(3, 29, 2018);
 
         $this->assertTrue($tarich->isThursday());
     }
 
     public function testIsFriday()
     {
-        $tarich = $tarich = Tarich::createGorgarian(3, 30, 2018);
+        $tarich = Tarich::createGorgarian(3, 30, 2018);
 
         $this->assertTrue($tarich->isFriday());
     }
 
     public function testIsSaturday()
     {
-        $tarich = $tarich = Tarich::createGorgarian(3, 31, 2018);
+        $tarich = Tarich::createGorgarian(3, 31, 2018);
 
         $this->assertTrue($tarich->isSaturday());
+    }
+
+    public function testEquals()
+    {
+        $tarich1 = Tarich::createGorgarian(5, 10, 2000);
+        $tarich2 = Tarich::createGorgarian(12, 31, 1996);
+
+        $this->assertTrue($tarich1->equals($tarich1));
+        $this->assertFalse($tarich1->equals($tarich2));
     }
 }
