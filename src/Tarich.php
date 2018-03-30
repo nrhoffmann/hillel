@@ -3,15 +3,11 @@
 
 namespace NRHoffmann\Hillel;
 
+use BadMethodCallException;
 use Error;
 use Exception;
-use const NRHoffmann\Hillel\Constants\FRIDAY;
-use const NRHoffmann\Hillel\Constants\MONDAY;
-use const NRHoffmann\Hillel\Constants\SATURDAY;
-use const NRHoffmann\Hillel\Constants\SUNDAY;
-use const NRHoffmann\Hillel\Constants\THURSDAY;
-use const NRHoffmann\Hillel\Constants\TUESDAY;
-use const NRHoffmann\Hillel\Constants\WEDNESDAY;
+use NRHoffmann\Hillel\Constants\DayOfWeek;
+use NRHoffmann\Hillel\Constants\Month;
 
 /**
  * Class Tarich.
@@ -123,8 +119,13 @@ final class Tarich
     public function equals(Tarich $that): bool
     {
         return $this->day === $that->day
-            && $this->month === $that->month
-            && $this->year === $that->year;
+               && $this->month === $that->month
+               && $this->year === $that->year;
+    }
+
+    public function dayOfWeek(): int
+    {
+        return jddayofweek(jewishtojd($this->month, $this->day, $this->year));
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -133,196 +134,279 @@ final class Tarich
 
     public function isSunday(): bool
     {
-        return $this->dayOfWeek() === SUNDAY;
-    }
-
-    public function dayOfWeek(): int
-    {
-        return jddayofweek(jewishtojd($this->month, $this->day, $this->year));
+        return $this->dayOfWeek() === DayOfWeek::SUNDAY;
     }
 
     public function isMonday(): bool
     {
-        return $this->dayOfWeek() === MONDAY;
+        return $this->dayOfWeek() === DayOfWeek::MONDAY;
     }
 
     public function isTuesday(): bool
     {
-        return $this->dayOfWeek() === TUESDAY;
+        return $this->dayOfWeek() === DayOfWeek::TUESDAY;
     }
 
     public function isWednesday(): bool
     {
-        return $this->dayOfWeek() === WEDNESDAY;
+        return $this->dayOfWeek() === DayOfWeek::WEDNESDAY;
     }
 
     public function isThursday(): bool
     {
-        return $this->dayOfWeek() === THURSDAY;
+        return $this->dayOfWeek() === DayOfWeek::THURSDAY;
     }
 
     public function isFriday(): bool
     {
-        return $this->dayOfWeek() === FRIDAY;
+        return $this->dayOfWeek() === DayOfWeek::FRIDAY;
     }
 
     public function isSaturday(): bool
     {
-        return $this->dayOfWeek() === SATURDAY;
-    }
-
-    public function isLeapYear(): bool
-    {
-        return Luach::isLeapYear($this->year);
+        return $this->dayOfWeek() === DayOfWeek::SATURDAY;
     }
 
     public function isErevRoshHashanah(): bool
     {
-        return Luach::isErevRoshHashanah($this);
+        return $this->month === Month::ELUL
+            && $this->day === 29;
     }
 
     public function isRoshHashanahDay1(): bool
     {
-        return Luach::isRoshHashanahDay1($this);
+        return $this->month === Month::TISHRI
+            && $this->day === 1;
     }
 
     public function isRoshHashanahDay2(): bool
     {
-        return Luach::isRoshHashanahDay2($this);
+        return $this->month === Month::TISHRI
+            && $this->day === 2;
     }
 
     public function isTzomGedaliah(): bool
     {
-        return Luach::isTzomGedaliah($this);
+        if (!$this->isSaturday()) {
+            return $this->month === Month::TISHRI
+                && $this->day === 3;
+        }
+
+        # If the 3rd of Tishri falls out on Saturday, Tzom Gedaliah is postponed to Sunday.
+        return $this->month === Month::TISHRI
+            && $this->day === 4;
     }
 
     public function isErevYomKippur(): bool
     {
-        return Luach::isErevYomKippur($this);
+        return $this->month === Month::TISHRI
+            && $this->day === 9;
     }
 
     public function isYomKippur(): bool
     {
-        return Luach::isYomKippur($this);
+        return $this->month === Month::TISHRI
+            && $this->day === 10;
     }
 
     public function isErevSukkot(): bool
     {
-        return Luach::isErevSukkot($this);
+        return $this->month === Month::TISHRI
+            && $this->day === 14;
     }
 
     public function isSukkotDay1(): bool
     {
-        return Luach::isSukkotDay1($this);
+        return $this->month === Month::TISHRI
+            && $this->day === 15;
     }
+
 
     public function isSukkotDay2(): bool
     {
-        return Luach::isSukkotDay2($this);
+        return $this->month === Month::TISHRI
+            && $this->day === 16;
     }
 
-    public function isCholHamoedSukkot($diaspora = true): bool
-    {
-        return Luach::isCholHamoedSukkot($this, $diaspora);
+    public function isCholHamoedSukkot($diaspora = true
+    ): bool {
+        if ($this->month === Month::TISHRI) {
+            if ($diaspora) {
+                return $this->day >= 17
+                    && $this->day <= 20;
+            }
+
+            return $this->day >= 16
+                && $this->day <= 20;
+        }
+
+        return false;
     }
 
     public function isHoshanaRabbah(): bool
     {
-        return Luach::isHoshanaRabbah($this);
+        return $this->month === Month::TISHRI
+            && $this->day === 21;
     }
 
-    public function isSimchatTorah($diaspora = true): bool
-    {
-        return Luach::isSimchatTorah($this, $diaspora);
+    public function isSimchatTorah($diaspora = true
+    ): bool {
+        if ($diaspora) {
+            return $this->month === Month::TISHRI
+                && $this->day === 23;
+        }
+
+        return Luach::isSheminiAzeret($this);
     }
 
     public function isSheminiAzeret(): bool
     {
-        return Luach::isSheminiAzeret($this);
+        return $this->month === Month::TISHRI
+            && $this->day === 22;
     }
 
-    public function isIsruChagSukkot($diaspora = true): bool
-    {
-        return Luach::isIsruChagSukkot($this, $diaspora);
+    public function isIsruChagSukkot($diaspora = true
+    ): bool {
+        if ($diaspora) {
+            return $this->month === Month::TISHRI
+                && $this->day === 24;
+        }
+
+        return $this->month === Month::TISHRI
+            && $this->day === 23;
     }
 
     public function isHanukkahDay(int $day): bool
     {
-        return Luach::isHanukkahDay($day, $this);
+        if ($day > 8 || $day < 1) {
+            throw new BadMethodCallException();
+        }
+
+        $HanukkahStart = Tarich::create($this->year, Month::KISLEV, 25);
+        $offset        = --$day;
+
+        return $this->equals($HanukkahStart->addDays($offset));
     }
 
     public function isTzomTevet(): bool
     {
-        return Luach::isTzomTevet($this);
+        if (!$this->isSaturday()) {
+            return $this->month === Month::TEVET
+                && $this->day === 10;
+        }
+
+        # If the 10th of Tevet falls out on Saturday, Tzom Tevet is postponed to Sunday.
+        return $this->month === Month::TEVET
+            && $this->day === 11;
     }
 
     public function isTuBShevat(): bool
     {
-        return Luach::isTuBShevat($this);
+        return $this->month === Month::SHEVAT
+            && $this->day === 15;
     }
 
     public function isPurimKatan(): bool
     {
-        return Luach::isPurimKatan($this);
+        return $this->month === Month::ADAR_1
+            && $this->day === 14;
     }
 
     public function isShushanPurimKatan(): bool
     {
-        return Luach::isShushanPurimKatan($this);
+        return $this->month === Month::ADAR_1
+            && $this->day === 15;
     }
 
     public function isTanisEsther(): bool
     {
-        return Luach::isTanisEsther($this);
+        if (!$this->isSaturday()) {
+            return $this->month === Month::ADAR
+                && $this->day === 13;
+        }
+
+        # If the 13th of Adar falls out on a Saturday, Tanis Esther occurs on the preceding Thursday
+        return $this->month === Month::ADAR
+            && $this->day === 11;
     }
 
     public function isPurim(): bool
     {
-        return Luach::isPurim($this);
+        return $this->month === Month::ADAR
+            && $this->day === 14;
     }
 
     public function isShushanPurim(): bool
     {
-        return Luach::isShushanPurim($this);
+        # INVESTIGATE: In some customs, Shushan Purim is postponed to Sunday if the 15th of Adar falls out on a Saturday.
+        return $this->month === Month::ADAR
+            && $this->day === 15;
     }
 
     public function isShabbatHagadol(): bool
     {
-        return Luach::isShabbatHagadol($this);
+        $pesach         = Tarich::create($this->year, Month::NISAN, 15);
+        $shabbatHagadol = $pesach->subWeek()->nextSaturday();
+
+        return $this->equals($shabbatHagadol);
     }
 
     public function isErevPesach(): bool
     {
-        return Luach::isErevPesach($this);
+        return $this->month === Month::NISAN
+            && $this->day === 14;
     }
 
     public function isPesachDay1(): bool
     {
-        return Luach::isPesachDay1($this);
-
+        return $this->month === Month::NISAN
+            && $this->day === 15;
     }
+
 
     public function isPesachDay2(): bool
     {
-        return Luach::isPesachDay2($this);
-
+        return $this->month === Month::NISAN
+            && $this->day === 16;
     }
 
-    public function isCholHamoedPesach($diaspora = true): bool
-    {
-        return Luach::isCholHamoedPesach($this, $diaspora);
+    public function isCholHamoedPesach($diaspora = true
+    ): bool {
+        if ($this->month === Month::NISAN) {
+            if ($diaspora) {
+                return $this->day >= 17
+                    && $this->day <= 20;
+            }
+
+            return $this->day >= 16
+                && $this->day <= 20;
+        }
+
+        return false;
     }
+
 
     public function isPesachDay7(): bool
     {
-        return Luach::isPesachDay7($this);
-
+        return $this->month === Month::NISAN
+            && $this->day === 21;
     }
 
     public function isPesachDay8(): bool
     {
-        return Luach::isPesachDay8($this);
+        return $this->month === Month::NISAN
+            && $this->day === 22;
+    }
 
+    public function isIsruChagPesach($diaspora = true
+    ): bool {
+        if ($diaspora) {
+            return $this->month === Month::NISAN
+                && $this->day === 23;
+        }
+
+        return $this->month === Month::NISAN
+            && $this->day === 22;
     }
 
     # TODO: Israeli Holidays...
@@ -344,65 +428,88 @@ final class Tarich
      * For years of 2004 and later, if the 4 Iyar falls on a Sunday, Yom Ha'Atzmaut is postponed by one day.
      */
 
-    public function isIsruChagPesach($diaspora = true): bool
-    {
-        return Luach::isIsruChagPesach($this, $diaspora);
-    }
-
     public function isPesachSheini(): bool
     {
-        return Luach::isPesachSheini($this);
+        return $this->month === Month::IYAR
+            && $this->day === 14;
     }
 
     public function isLagBOmer(): bool
     {
-        return Luach::isLagBOmer($this);
+        return $this->month === Month::IYAR
+            && $this->day === 18;
     }
 
     public function isYomYerushalayim(): bool
     {
-        return Luach::isYomYerushalayim($this);
+        return $this->month === Month::IYAR
+            && $this->day === 28;
     }
 
     public function isErevShavuot(): bool
     {
-        return Luach::isErevShavuot($this);
+        return $this->month === Month::SIVAN
+            && $this->day === 5;
     }
 
     public function isShavuotDay1(): bool
     {
-        return Luach::isShavuotDay1($this);
+        return $this->month === Month::SIVAN
+            && $this->day === 6;
     }
+
 
     public function isShavuotDay2(): bool
     {
-        return Luach::isShavuotDay2($this);
-
+        return $this->month === Month::SIVAN
+            && $this->day === 7;
     }
 
-    public function isIsruChagShavuot($diaspora = true): bool
-    {
-        return Luach::isIsruChagShavuot($this, $diaspora);
+    public function isIsruChagShavuot($diaspora = true
+    ): bool {
+        if ($diaspora) {
+            return $this->month === Month::SIVAN
+                && $this->day === 8;
+        }
+
+        return $this->month === Month::SIVAN
+            && $this->day === 7;
     }
 
     public function isTzomTammuz(): bool
     {
-        return Luach::isTzomTammuz($this);
+        if (!$this->isSaturday()) {
+            return $this->month === Month::TAMMUZ
+                && $this->day === 17;
+        }
+
+        # If the 17th of Tammuz falls out on Saturday, Tzom Gedaliah is postponed to Sunday.
+        return $this->month === Month::TAMMUZ
+            && $this->day === 18;
     }
 
     public function isTishaBAv(): bool
     {
-        return Luach::isTishaBAv($this);
+        if (!$this->isSaturday()) {
+            return $this->month === Month::AV
+                && $this->day === 9;
+        }
+
+        # If the 9th of Av falls out on Saturday, Tzom Gedaliah is postponed to Sunday.
+        return $this->month === Month::AV
+            && $this->day === 10;
     }
 
     public function isTuBAv(): bool
     {
-        return Luach::isTuBAv($this);
+        return $this->month === Month::AV
+            && $this->day === 15;
     }
 
     public function isRoshChodesh(): bool
     {
-        return Luach::isRoshChodesh($this);
+        return $this->day === 1
+            || $this->day === 30;
     }
 
     ////////////////////////////////////////////////////////////////////////

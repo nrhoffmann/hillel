@@ -7,15 +7,6 @@ use PHPUnit\Framework\TestCase;
 class TarichTest extends TestCase
 {
 
-    public function testIsLeapYear()
-    {
-        $tarich = Tarich::create(1,1, 5774);
-        $this->assertTrue($tarich->isLeapYear());
-
-        $tarich = Tarich::create(1,1, 5775);
-        $this->assertFalse($tarich->isLeapYear());
-    }
-
     public function testMagicGetOnYear()
     {
         $tarich = Tarich::create(9, 3, 5776);
