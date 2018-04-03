@@ -15,23 +15,17 @@ use NRHoffmann\Hillel\Constants\Month;
  * @property-read $day
  * @property-read $month
  * @property-read $year
+ * @property-read $dow
  *
  * @package NRHoffmann\Tarich
  */
 final class Tarich
 {
-
-    private $day;
-
-    private $month;
-
-    private $year;
+    private $daysPastJulianEpoch;
 
     public function __construct($month, $day, $year)
     {
-        $this->day   = $day;
-        $this->month = $month;
-        $this->year  = $year;
+        $this->daysPastJulianEpoch = jewishtojd($month, $day, $year);
     }
 
     public static function create($month, $day, $year): Tarich
@@ -99,13 +93,14 @@ final class Tarich
      */
     public function __get($name)
     {
+        $computedDate = cal_from_jd($this->daysPastJulianEpoch, CAL_JEWISH);
+
         switch (true) {
             case $name === 'day':
-                return $this->day;
             case $name === 'month':
-                return $this->month;
             case $name === 'year':
-                return $this->year;
+            case $name === 'dow':
+                return $computedDate[$name];
             default:
                 throw new Error();
         }
@@ -125,7 +120,7 @@ final class Tarich
 
     public function dayOfWeek(): int
     {
-        return jddayofweek(jewishtojd($this->month, $this->day, $this->year));
+        return $this->dow;
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -526,33 +521,7 @@ final class Tarich
 
     public function addDays($days): Tarich
     {
-        # TODO
-        return $this;
-    }
-
-    public function addWeek($weeks): Tarich
-    {
-        $this->addWeeks(1);
-
-        return $this;
-    }
-
-    public function addWeeks($weeks): Tarich
-    {
-        # TODO
-        return $this;
-    }
-
-    public function addYear($years): Tarich
-    {
-        $this->addYears(1);
-
-        return $this;
-    }
-
-    public function addYears($years): Tarich
-    {
-        # TODO
+        $this->daysPastJulianEpoch += $days;
         return $this;
     }
 
@@ -566,37 +535,12 @@ final class Tarich
 
     public function subDays($days): Tarich
     {
-        # TODO
-        return $this;
-    }
-
-    public function subWeek($weeks): Tarich
-    {
-        $this->subWeeks(1);
-
-        return $this;
-    }
-
-    public function subWeeks($weeks): Tarich
-    {
-        # TODO
-        return $this;
-    }
-
-    public function subYear($years): Tarich
-    {
-        $this->subYears(1);
-
-        return $this;
-    }
-
-    public function subYears($years): Tarich
-    {
-        # TODO
+        $this->addDay(-$days);
         return $this;
     }
 
     public function nextSaturday(): Tarich
     {
+        # todo
     }
 }

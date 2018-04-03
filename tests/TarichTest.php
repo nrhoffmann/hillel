@@ -1,6 +1,7 @@
 <?php
 
 
+use NRHoffmann\Hillel\Constants\Month;
 use NRHoffmann\Hillel\Tarich;
 use PHPUnit\Framework\TestCase;
 
@@ -114,5 +115,12 @@ class TarichTest extends TestCase
 
         $this->assertTrue($tarich1->equals($tarich1));
         $this->assertFalse($tarich1->equals($tarich2));
+    }
+
+    public function testIsErevPassover()
+    {
+        $tarich = Tarich::create(8, 14, 5778);
+
+        $this->assertTrue($tarich->isErevPesach());
     }
 }
