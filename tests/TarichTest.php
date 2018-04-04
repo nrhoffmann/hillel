@@ -1,7 +1,6 @@
 <?php
 
 
-use NRHoffmann\Hillel\Constants\Month;
 use NRHoffmann\Hillel\Tarich;
 use PHPUnit\Framework\TestCase;
 
@@ -24,6 +23,12 @@ class TarichTest extends TestCase
     {
         $tarich = Tarich::create(9, 3, 5776);
         $this->assertEquals(3, $tarich->day);
+    }
+
+    public function testMagicGetOnDayOfWeek()
+    {
+        $tarich = Tarich::createGorgarian(4, 3, 2018);
+        $this->assertEquals(2, $tarich->dow);
     }
 
     public function testToString()

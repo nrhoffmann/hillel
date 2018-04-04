@@ -23,7 +23,7 @@ final class Tarich
 {
     private $daysPastJulianEpoch;
 
-    public function __construct($month, $day, $year)
+    private function __construct($month, $day, $year)
     {
         $this->daysPastJulianEpoch = jewishtojd($month, $day, $year);
     }
@@ -537,10 +537,5 @@ final class Tarich
     {
         $this->addDay(-$days);
         return $this;
-    }
-
-    public function nextSaturday(): Tarich
-    {
-        # todo
     }
 }
