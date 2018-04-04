@@ -223,4 +223,52 @@ class TarichTest extends TestCase
         $this->assertTrue($tarich5->isCholHamoedPesach(false));
         $this->assertTrue($tarich5->isCholHamoedPesach());
     }
+
+    public function testIsHoshanaRabbah()
+    {
+        $tarich = Tarich::fromJewish(1, 21, 5778);
+
+        $this->assertTrue($tarich->isHoshanaRabbah());
+    }
+
+    public function testIsSimchatTorah()
+    {
+        $tarich1 = Tarich::fromJewish(1, 22, 5778);
+        $tarich2 = Tarich::fromJewish(1, 23, 5778);
+
+        $this->assertTrue($tarich1->isSimchatTorah(false));
+        $this->assertFalse($tarich1->isSimchatTorah());
+
+        $this->assertFalse($tarich2->isSimchatTorah(false));
+        $this->assertTrue($tarich2->isSimchatTorah());
+    }
+
+    public function testIsSheminiAzeret()
+    {
+        $tarich = Tarich::fromJewish(1, 22, 5778);
+
+        $this->assertTrue($tarich->isSheminiAzeret());
+    }
+
+    public function testIsIsruChagSukkot() {
+        $tarich1 = Tarich::fromJewish(1, 23, 5778);
+        $tarich2 = Tarich::fromJewish(1, 24, 5778);
+
+        $this->assertTrue($tarich1->isIsruChagSukkot(false));
+        $this->assertFalse($tarich1->isIsruChagSukkot());
+
+        $this->assertFalse($tarich2->isIsruChagSukkot(false));
+        $this->assertTrue($tarich2->isIsruChagSukkot());
+    }
+    
+    public function testIsIsruChagPesach() {
+        $tarich1 = Tarich::fromJewish(8, 22, 5778);
+        $tarich2 = Tarich::fromJewish(8, 23, 5778);
+
+        $this->assertTrue($tarich1->isIsruChagPesach(false));
+        $this->assertFalse($tarich1->isIsruChagPesach());
+
+        $this->assertFalse($tarich2->isIsruChagPesach(false));
+        $this->assertTrue($tarich2->isIsruChagPesach());
+    }
 }
