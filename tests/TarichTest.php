@@ -175,4 +175,52 @@ class TarichTest extends TestCase
 
         $this->assertTrue($tarich->isSukkotDay2());
     }
+
+    public function testIsCholHamoedSukkot()
+    {
+        $tarich1 = Tarich::fromJewish(1, 16, 5778);
+        $tarich2 = Tarich::fromJewish(1, 17, 5778);
+        $tarich3 = Tarich::fromJewish(1, 18, 5778);
+        $tarich4 = Tarich::fromJewish(1, 19, 5778);
+        $tarich5 = Tarich::fromJewish(1, 20, 5778);
+
+        $this->assertTrue($tarich1->isCholHamoedSukkot(false));
+        $this->assertFalse($tarich1->isCholHamoedSukkot());
+
+        $this->assertTrue($tarich2->isCholHamoedSukkot(false));
+        $this->assertTrue($tarich2->isCholHamoedSukkot());
+
+        $this->assertTrue($tarich3->isCholHamoedSukkot(false));
+        $this->assertTrue($tarich3->isCholHamoedSukkot());
+
+        $this->assertTrue($tarich4->isCholHamoedSukkot(false));
+        $this->assertTrue($tarich4->isCholHamoedSukkot());
+
+        $this->assertTrue($tarich5->isCholHamoedSukkot(false));
+        $this->assertTrue($tarich5->isCholHamoedSukkot());
+    }
+
+    public function testIsCholHamoedPesach()
+    {
+        $tarich1 = Tarich::fromJewish(8, 16, 5778);
+        $tarich2 = Tarich::fromJewish(8, 17, 5778);
+        $tarich3 = Tarich::fromJewish(8, 18, 5778);
+        $tarich4 = Tarich::fromJewish(8, 19, 5778);
+        $tarich5 = Tarich::fromJewish(8, 20, 5778);
+
+        $this->assertTrue($tarich1->isCholHamoedPesach(false));
+        $this->assertFalse($tarich1->isCholHamoedPesach());
+
+        $this->assertTrue($tarich2->isCholHamoedPesach(false));
+        $this->assertTrue($tarich2->isCholHamoedPesach());
+
+        $this->assertTrue($tarich3->isCholHamoedPesach(false));
+        $this->assertTrue($tarich3->isCholHamoedPesach());
+
+        $this->assertTrue($tarich4->isCholHamoedPesach(false));
+        $this->assertTrue($tarich4->isCholHamoedPesach());
+
+        $this->assertTrue($tarich5->isCholHamoedPesach(false));
+        $this->assertTrue($tarich5->isCholHamoedPesach());
+    }
 }
