@@ -271,4 +271,68 @@ class TarichTest extends TestCase
         $this->assertFalse($tarich2->isIsruChagPesach(false));
         $this->assertTrue($tarich2->isIsruChagPesach());
     }
+    
+    public function testIsHanukkahDay1()
+    {
+        $tarich = Tarich::fromJewish(3, 25, 5778);
+
+        $this->assertTrue($tarich->isHanukkahDay1());
+        $this->assertTrue($tarich->isHanukkahDayAny());
+    }
+
+    public function testIsHanukkahDay2()
+    {
+        $tarich = Tarich::fromJewish(3, 26, 5778);
+
+        $this->assertTrue($tarich->isHanukkahDay2());
+        $this->assertTrue($tarich->isHanukkahDayAny());
+    }
+
+    public function testIsHanukkahDay3()
+    {
+        $tarich = Tarich::fromJewish(3, 27, 5778);
+
+        $this->assertTrue($tarich->isHanukkahDay3());
+        $this->assertTrue($tarich->isHanukkahDayAny());
+    }
+
+    public function testIsHanukkahDay4()
+    {
+        $tarich = Tarich::fromJewish(3, 28, 5778);
+
+        $this->assertTrue($tarich->isHanukkahDay4());
+        $this->assertTrue($tarich->isHanukkahDayAny());
+    }
+
+    public function testIsHanukkahDay5()
+    {
+        $tarich = Tarich::fromJewish(3, 29, 5778);
+
+        $this->assertTrue($tarich->isHanukkahDay5());
+        $this->assertTrue($tarich->isHanukkahDayAny());
+    }
+
+    public function testIsHanukkahDay6()
+    {
+        $tarich = Tarich::fromJewish(3, 30, 5778);
+
+        $this->assertTrue($tarich->isHanukkahDay6());
+        $this->assertTrue($tarich->isHanukkahDayAny());
+    }
+
+    public function testIsHanukkahDay7()
+    {
+        $tarich = Tarich::fromJewish(4, 1, 5778);
+
+        $this->assertTrue($tarich->isHanukkahDay7());
+        $this->assertTrue($tarich->isHanukkahDayAny());
+    }
+
+    public function testIsHanukkahDay8()
+    {
+        $tarich = Tarich::fromJewish(4, 2, 5778);
+
+        $this->assertTrue($tarich->isHanukkahDay8());
+        $this->assertTrue($tarich->isHanukkahDayAny());
+    }
 }

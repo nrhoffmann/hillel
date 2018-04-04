@@ -223,17 +223,65 @@ final class Tarich
             && $this->day === 23;
     }
 
-    public function isHanukkahDay(int $day): bool
+    private function isHanukkahDay(int $day): bool
     {
-        if ($day > 8 || $day < 1) {
-            throw new BadMethodCallException();
-        }
+        $before = Tarich::fromJewish(Month::KISLEV, 24, $this->year);
 
-        $HanukkahStart = Tarich::fromJewish($this->year, Month::KISLEV, 25);
-        $offset        = --$day;
-
-        return $this->equals($HanukkahStart->addDays($offset));
+        return $this->equals($before->addDays($day));
     }
+
+    public function isHanukkahDay1(): bool
+    {
+        return $this->isHanukkahDay(1);
+    }
+
+    public function isHanukkahDay2(): bool
+    {
+        return $this->isHanukkahDay(2);
+    }
+
+    public function isHanukkahDay3(): bool
+    {
+        return $this->isHanukkahDay(3);
+    }
+
+    public function isHanukkahDay4(): bool
+    {
+        return $this->isHanukkahDay(4);
+    }
+
+    public function isHanukkahDay5(): bool
+    {
+        return $this->isHanukkahDay(5);
+    }
+
+    public function isHanukkahDay6(): bool
+    {
+        return $this->isHanukkahDay(6);
+    }
+
+    public function isHanukkahDay7(): bool
+    {
+        return $this->isHanukkahDay(7);
+    }
+
+    public function isHanukkahDay8(): bool
+    {
+        return $this->isHanukkahDay(8);
+    }
+
+    public function isHanukkahDayAny(): bool
+    {
+        return $this->isHanukkahDay1()
+            || $this->isHanukkahDay2()
+            || $this->isHanukkahDay3()
+            || $this->isHanukkahDay4()
+            || $this->isHanukkahDay5()
+            || $this->isHanukkahDay6()
+            || $this->isHanukkahDay7()
+            || $this->isHanukkahDay8();
+    }
+
 
     public function isTzomTevet(): bool
     {
@@ -465,10 +513,7 @@ final class Tarich
 
     public function addDay($days): Tarich
     {
-        $this->addDays(1);
-
-        return $this;
-
+        return $this->addDays(1);
     }
 
     public function addDays($days): Tarich
