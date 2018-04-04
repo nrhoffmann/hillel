@@ -23,62 +23,19 @@ final class Tarich
 {
     private $daysPastJulianEpoch;
 
-    private function __construct($month, $day, $year)
+    private function __construct($daysPastJulianEpoch)
     {
-        $this->daysPastJulianEpoch = jewishtojd($month, $day, $year);
+        $this->daysPastJulianEpoch = $daysPastJulianEpoch;
     }
 
-    public static function create($month, $day, $year): Tarich
+    public static function fromJewish($month, $day, $year): Tarich
     {
-        return new Tarich($month, $day, $year);
+        return new Tarich(jewishtojd($month, $day, $year));
     }
 
-    public static function createGorgarian($month, $day, $year): Tarich
+    public static function fromGorgarian($month, $day, $year): Tarich
     {
-        $julianDayNumber  = gregoriantojd($month, $day, $year);
-        $jewishDateString = jdtojewish($julianDayNumber);
-
-        return Tarich::parse($jewishDateString);
-    }
-
-    public static function parse($string, $format = ['month', 'day', 'year']
-    ): Tarich {
-        $group   = '/[\d]+/';
-        $matches = [];
-        $args    = [];
-
-        preg_match_all($group, $string, $matches);
-        foreach ($matches[0] as $key => $value) {
-            $arg        = $format[$key];
-            $args[$arg] = intval($value);
-        }
-
-        try {
-            return Tarich::constructWith($args);
-        } catch (Exception $exception) {
-
-        }
-    }
-
-    /**
-     * @param $args
-     *
-     * @return Tarich
-     * @throws \Exception
-     */
-    private static function constructWith($args): Tarich
-    {
-        $month = null;
-        $day   = null;
-        $year  = null;
-
-        extract($args, EXTR_IF_EXISTS);
-
-        if (is_null($month) || is_null($day) || is_null($year)) {
-            throw new Exception();
-        }
-
-        return new Tarich($month, $day, $year);
+        return new Tarich(gregoriantojd($month, $day, $year));
     }
 
     /**
@@ -118,48 +75,43 @@ final class Tarich
                && $this->year === $that->year;
     }
 
-    public function dayOfWeek(): int
-    {
-        return $this->dow;
-    }
-
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////// Predicates //////////////////////////////
     ////////////////////////////////////////////////////////////////////////
 
     public function isSunday(): bool
     {
-        return $this->dayOfWeek() === DayOfWeek::SUNDAY;
+        return $this->dow === DayOfWeek::SUNDAY;
     }
 
     public function isMonday(): bool
     {
-        return $this->dayOfWeek() === DayOfWeek::MONDAY;
+        return $this->dow === DayOfWeek::MONDAY;
     }
 
     public function isTuesday(): bool
     {
-        return $this->dayOfWeek() === DayOfWeek::TUESDAY;
+        return $this->dow === DayOfWeek::TUESDAY;
     }
 
     public function isWednesday(): bool
     {
-        return $this->dayOfWeek() === DayOfWeek::WEDNESDAY;
+        return $this->dow === DayOfWeek::WEDNESDAY;
     }
 
     public function isThursday(): bool
     {
-        return $this->dayOfWeek() === DayOfWeek::THURSDAY;
+        return $this->dow === DayOfWeek::THURSDAY;
     }
 
     public function isFriday(): bool
     {
-        return $this->dayOfWeek() === DayOfWeek::FRIDAY;
+        return $this->dow === DayOfWeek::FRIDAY;
     }
 
     public function isSaturday(): bool
     {
-        return $this->dayOfWeek() === DayOfWeek::SATURDAY;
+        return $this->dow === DayOfWeek::SATURDAY;
     }
 
     public function isErevRoshHashanah(): bool
@@ -182,14 +134,14 @@ final class Tarich
 
     public function isTzomGedaliah(): bool
     {
-        if (!$this->isSaturday()) {
+        # If the 3rd of Tishri falls out on Saturday, Tzom Gedaliah is postponed to Sunday.
+        if (Tarich::fromJewish(Month::TISHRI, 3, $this->year)->isSaturday()) {
             return $this->month === Month::TISHRI
-                && $this->day === 3;
+                && $this->day === 4;
         }
 
-        # If the 3rd of Tishri falls out on Saturday, Tzom Gedaliah is postponed to Sunday.
         return $this->month === Month::TISHRI
-            && $this->day === 4;
+            && $this->day === 3;
     }
 
     public function isErevYomKippur(): bool
@@ -277,7 +229,7 @@ final class Tarich
             throw new BadMethodCallException();
         }
 
-        $HanukkahStart = Tarich::create($this->year, Month::KISLEV, 25);
+        $HanukkahStart = Tarich::fromJewish($this->year, Month::KISLEV, 25);
         $offset        = --$day;
 
         return $this->equals($HanukkahStart->addDays($offset));
@@ -340,7 +292,7 @@ final class Tarich
 
     public function isShabbatHagadol(): bool
     {
-        $pesach         = Tarich::create($this->year, Month::NISAN, 15);
+        $pesach         = Tarich::fromJewish($this->year, Month::NISAN, 15);
         $shabbatHagadol = $pesach->subWeek()->nextSaturday();
 
         return $this->equals($shabbatHagadol);
