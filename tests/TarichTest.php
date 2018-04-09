@@ -394,4 +394,42 @@ class TarichTest extends TestCase
 
         $this->assertTrue($tarich->isShabbatHagadol());
     }
+
+    public function testAddDay()
+    {
+        $tarich1 = Tarich::fromGorgarian(4, 9, 2018);
+        $tarich2 = Tarich::fromGorgarian(4, 10 , 2018);
+
+        $tarich3 = $tarich1->addDay();
+
+        $this->assertTrue($tarich3->equals($tarich2));
+    }
+
+    public function testIsPesachDay1()
+    {
+        $tarich = Tarich::fromJewish(8, 15, 5778);
+
+        $this->assertTrue($tarich->isPesachDay1());
+    }
+
+    public function testIsPesachDay2()
+    {
+        $tarich = Tarich::fromJewish(8, 16, 5778);
+
+        $this->assertTrue($tarich->isPesachDay2());
+    }
+
+    public function testIsPesachDay7()
+    {
+        $tarich = Tarich::fromJewish(8, 21, 5778);
+
+        $this->assertTrue($tarich->isPesachDay7());
+    }
+
+    public function testIsPesachDay8()
+    {
+        $tarich = Tarich::fromJewish(8, 22, 5778);
+
+        $this->assertTrue($tarich->isPesachDay8());
+    }
 }
