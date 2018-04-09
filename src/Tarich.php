@@ -70,9 +70,7 @@ final class Tarich
 
     public function equals(Tarich $that): bool
     {
-        return $this->day === $that->day
-               && $this->month === $that->month
-               && $this->year === $that->year;
+        return $this->daysPastJulianEpoch === $that->daysPastJulianEpoch;
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -282,17 +280,10 @@ final class Tarich
             || $this->isHanukkahDay8();
     }
 
-
     public function isTzomTevet(): bool
     {
-        if (!$this->isSaturday()) {
-            return $this->month === Month::TEVET
-                && $this->day === 10;
-        }
-
-        # If the 10th of Tevet falls out on Saturday, Tzom Tevet is postponed to Sunday.
         return $this->month === Month::TEVET
-            && $this->day === 11;
+            && $this->day === 10;
     }
 
     public function isTuBShevat(): bool
@@ -315,14 +306,14 @@ final class Tarich
 
     public function isTanisEsther(): bool
     {
-        if (!$this->isSaturday()) {
+        # If the 13th of Adar falls out on a Saturday, Tanis Esther occurs on the preceding Thursday
+        if (Tarich::fromJewish(Month::ADAR, 13, $this->year)->isSaturday()) {
             return $this->month === Month::ADAR
-                && $this->day === 13;
+                && $this->day === 11;
         }
 
-        # If the 13th of Adar falls out on a Saturday, Tanis Esther occurs on the preceding Thursday
         return $this->month === Month::ADAR
-            && $this->day === 11;
+            && $this->day === 13;
     }
 
     public function isPurim(): bool
@@ -340,8 +331,11 @@ final class Tarich
 
     public function isShabbatHagadol(): bool
     {
-        $pesach         = Tarich::fromJewish($this->year, Month::NISAN, 15);
-        $shabbatHagadol = $pesach->subWeek()->nextSaturday();
+        $pesach = Tarich::fromJewish(Month::NISAN, 15, $this->year);
+
+        while (($shabbatHagadol = $pesach->subDay())->dow !== DayOfWeek::SATURDAY) {
+            // intentionally left empty
+        };
 
         return $this->equals($shabbatHagadol);
     }
@@ -511,7 +505,7 @@ final class Tarich
     /////////////////////////////// Mutators ///////////////////////////////
     ////////////////////////////////////////////////////////////////////////
 
-    public function addDay($days): Tarich
+    public function addDay(): Tarich
     {
         return $this->addDays(1);
     }
@@ -519,20 +513,17 @@ final class Tarich
     public function addDays($days): Tarich
     {
         $this->daysPastJulianEpoch += $days;
+
         return $this;
     }
 
-    public function subDay($days): Tarich
+    public function subDay(): Tarich
     {
-        $this->subDays(1);
-
-        return $this;
-
+        return $this->subDays(1);
     }
 
     public function subDays($days): Tarich
     {
-        $this->addDay(-$days);
-        return $this;
+        return $this->addDays(-$days);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 
+use NRHoffmann\Hillel\Constants\Month;
 use NRHoffmann\Hillel\Tarich;
 use PHPUnit\Framework\TestCase;
 
@@ -334,5 +335,63 @@ class TarichTest extends TestCase
 
         $this->assertTrue($tarich->isHanukkahDay8());
         $this->assertTrue($tarich->isHanukkahDayAny());
+    }
+
+    public function testIsTzomTevet()
+    {
+        $tarich = Tarich::fromJewish(Month::TEVET, 10, 5778);
+
+        $this->assertTrue($tarich->isTzomTevet());
+    }
+
+    public function testIsTuBShevat()
+    {
+        $tarich = Tarich::fromJewish(Month::SHEVAT, 15, 5778);
+
+        $this->assertTrue($tarich->isTuBShevat());
+    }
+
+    public function testIsPurimKatan()
+    {
+        $tarich = Tarich::fromJewish(Month::ADAR_1, 14, 5776);
+
+        $this->assertTrue($tarich->isPurimKatan());
+    }
+
+    public function testIsShushanPurimKatan()
+    {
+        $tarich = Tarich::fromJewish(Month::ADAR_1, 15, 5776);
+
+        $this->assertTrue($tarich->isShushanPurimKatan());
+    }
+
+    public function testIsPurim()
+    {
+        $tarich = Tarich::fromJewish(Month::ADAR, 14, 5777);
+
+        $this->assertTrue($tarich->isPurim());
+    }
+
+    public function testIsShushanPurim()
+    {
+        $tarich = Tarich::fromJewish(Month::ADAR_2, 15, 5776);
+
+        $this->assertTrue($tarich->isShushanPurim());
+    }
+
+    public function testIsTanisEsther()
+    {
+        $tarich1 = Tarich::fromJewish(Month::ADAR, 13, 5778);
+        $tarich2 = Tarich::fromJewish(Month::ADAR_2, 11, 5774);
+
+        $this->assertTrue($tarich1->isTanisEsther());
+        $this->assertTrue($tarich2->isTanisEsther());
+    }
+
+    public function testIsShabbatHagadol()
+    {
+        $tarich = Tarich::fromGorgarian(3, 24, 2018);
+
+        $this->assertTrue($tarich->isShabbatHagadol());
     }
 }
