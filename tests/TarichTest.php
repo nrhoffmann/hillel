@@ -32,6 +32,20 @@ class TarichTest extends TestCase
         $this->assertEquals(2, $tarich->dow);
     }
 
+    public function testMagicGetOnFoo()
+    {
+        $tarich = Tarich::fromGorgarian(4, 3, 2018);
+
+        $errorWasThrown = false;
+        try {
+            $this->assertEquals(2, $tarich->foo);
+        } catch (Error $error) {
+            $errorWasThrown = true;
+        }
+
+        $this->assertTrue($errorWasThrown);
+    }
+
     public function testToString()
     {
         $tarich = Tarich::fromJewish(7, 14, 5774);
@@ -184,6 +198,7 @@ class TarichTest extends TestCase
         $tarich3 = Tarich::fromJewish(1, 18, 5778);
         $tarich4 = Tarich::fromJewish(1, 19, 5778);
         $tarich5 = Tarich::fromJewish(1, 20, 5778);
+        $tarich6 = Tarich::fromJewish(13, 7, 5555);
 
         $this->assertTrue($tarich1->isCholHamoedSukkot(false));
         $this->assertFalse($tarich1->isCholHamoedSukkot());
@@ -199,6 +214,9 @@ class TarichTest extends TestCase
 
         $this->assertTrue($tarich5->isCholHamoedSukkot(false));
         $this->assertTrue($tarich5->isCholHamoedSukkot());
+
+        $this->assertFalse($tarich6->isCholHamoedSukkot(false));
+        $this->assertFalse($tarich6->isCholHamoedSukkot());
     }
 
     public function testIsCholHamoedPesach()
@@ -208,6 +226,7 @@ class TarichTest extends TestCase
         $tarich3 = Tarich::fromJewish(8, 18, 5778);
         $tarich4 = Tarich::fromJewish(8, 19, 5778);
         $tarich5 = Tarich::fromJewish(8, 20, 5778);
+        $tarich6 = Tarich::fromJewish(13, 7, 5555);
 
         $this->assertTrue($tarich1->isCholHamoedPesach(false));
         $this->assertFalse($tarich1->isCholHamoedPesach());
@@ -223,6 +242,9 @@ class TarichTest extends TestCase
 
         $this->assertTrue($tarich5->isCholHamoedPesach(false));
         $this->assertTrue($tarich5->isCholHamoedPesach());
+
+        $this->assertFalse($tarich6->isCholHamoedPesach(false));
+        $this->assertFalse($tarich6->isCholHamoedPesach());
     }
 
     public function testIsHoshanaRabbah()
