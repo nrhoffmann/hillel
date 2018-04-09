@@ -2,6 +2,10 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/nrhoffmann/hillel/badge.svg?branch=master&type=github)](https://coveralls.io/github/nrhoffmann/hillel?branch=master)
 [![Build Status](https://travis-ci.org/nrhoffmann/hillel.svg?branch=master&type=github)](https://travis-ci.org/nrhoffmann/hillel)
+[![Latest Stable Version](https://poser.pugx.org/nrhoffmann/hillel/v/stable)](https://packagist.org/packages/nrhoffmann/hillel)
+[![License](https://poser.pugx.org/nrhoffmann/hillel/license)](https://packagist.org/packages/nrhoffmann/hillel)
+
+
 
 ## Requirements
 
