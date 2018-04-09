@@ -467,26 +467,27 @@ final class Tarich
 
     public function isTzomTammuz(): bool
     {
-        if (!$this->isSaturday()) {
+        # If the 17th of Tammuz falls out on Saturday, Tzom Tammuz is postponed to Sunday.
+        if (Tarich::fromJewish(Month::TAMMUZ, 17, $this->year)->isSaturday()) {
             return $this->month === Month::TAMMUZ
-                && $this->day === 17;
+                && $this->day === 18;
         }
 
-        # If the 17th of Tammuz falls out on Saturday, Tzom Gedaliah is postponed to Sunday.
         return $this->month === Month::TAMMUZ
-            && $this->day === 18;
+            && $this->day === 17;
     }
 
     public function isTishaBAv(): bool
     {
-        if (!$this->isSaturday()) {
+        # If the 9th of Av falls out on Saturday, Tisha B'Av is postponed to Sunday.
+        if (Tarich::fromJewish(Month::AV, 9, $this->year)->isSaturday()) {
             return $this->month === Month::AV
-                && $this->day === 9;
+                && $this->day === 10;
         }
 
-        # If the 9th of Av falls out on Saturday, Tzom Gedaliah is postponed to Sunday.
+
         return $this->month === Month::AV
-            && $this->day === 10;
+            && $this->day === 9;
     }
 
     public function isTuBAv(): bool

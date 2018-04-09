@@ -432,4 +432,93 @@ class TarichTest extends TestCase
 
         $this->assertTrue($tarich->isPesachDay8());
     }
+
+    public function testIsPesachSheini()
+    {
+        $tarich = Tarich::fromJewish(9, 14, 5778);
+
+        $this->assertTrue($tarich->isPesachSheini());
+    }
+
+    public function testIsLagBOmer()
+    {
+        $tarich = Tarich::fromJewish(9, 18, 5778);
+
+        $this->assertTrue($tarich->isLagBOmer());
+    }
+
+    public function testIsYomYerushalayim()
+    {
+        $tarich = Tarich::fromJewish(9, 28, 5778);
+
+        $this->assertTrue($tarich->isYomYerushalayim());
+    }
+
+    public function testIsErevShavuot()
+    {
+        $tarich = Tarich::fromJewish(10, 5, 5778);
+
+        $this->assertTrue($tarich->isErevShavuot());
+    }
+
+    public function testIsShavuotDay1()
+    {
+        $tarich = Tarich::fromJewish(10, 6, 5778);
+
+        $this->assertTrue($tarich->isShavuotDay1());
+    }
+
+
+    public function testIsShavuotDay2()
+    {
+        $tarich = Tarich::fromJewish(10, 7, 5778);
+
+        $this->assertTrue($tarich->isShavuotDay2());
+    }
+
+    public function testIsIsruChagShavuot()
+    {
+        $tarich1 = Tarich::fromJewish(10, 7, 5778);
+        $tarich2 = Tarich::fromJewish(10, 8, 5778);
+
+        $this->assertTrue($tarich1->isIsruChagShavuot(false));
+        $this->assertFalse($tarich1->isIsruChagShavuot());
+
+        $this->assertFalse($tarich2->isIsruChagShavuot(false));
+        $this->assertTrue($tarich2->isIsruChagShavuot());
+    }
+
+    public function testIsTzomTammuz()
+    {
+        $tarich1 = Tarich::fromJewish(Month::TAMMUZ, 17, 5777);
+        $tarich2 = Tarich::fromJewish(Month::TAMMUZ, 18, 5778);
+
+        $this->assertTrue($tarich1->isTzomTammuz());
+        $this->assertTrue($tarich2->isTzomTammuz());
+    }
+
+    public function testIsTishaBAv()
+    {
+        $tarich1 = Tarich::fromJewish(Month::AV, 9, 5777);
+        $tarich2 = Tarich::fromJewish(Month::AV, 10, 5778);
+
+        $this->assertTrue($tarich1->isTishaBAv());
+        $this->assertTrue($tarich2->isTishaBAv());
+    }
+
+    public function testIsTuBAv()
+    {
+        $tarich = Tarich::fromJewish(12, 15, 5778);
+
+        $this->assertTrue($tarich->isTuBAv());
+    }
+
+    public function testIsRoshChodesh()
+    {
+        $tarich1 = Tarich::fromJewish(8, 30, 5778);
+        $tarich2 = Tarich::fromJewish(9, 1, 5778);
+
+        $this->assertTrue($tarich1->isRoshChodesh());
+        $this->assertTrue($tarich2->isRoshChodesh());
+    }
 }
