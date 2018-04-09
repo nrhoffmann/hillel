@@ -1,8 +1,6 @@
 <?php
 
-
 namespace NRHoffmann\Hillel\Traits;
-
 
 use ReflectionClass;
 
@@ -10,10 +8,12 @@ trait EnumerableConstants
 {
     /**
      * @param $value
-     * @return mixed
+     *
      * @throws \ReflectionException
+     *
+     * @return mixed
      */
-    public final static function getNameOf($value)
+    final public static function getNameOf($value)
     {
         $class = new ReflectionClass(self::class);
         $constants = $class->getConstants();

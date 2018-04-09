@@ -1,8 +1,6 @@
 <?php
 
-
 namespace NRHoffmann\Hillel;
-
 
 use NRHoffmann\Hillel\Constants\CalenderFact;
 use NRHoffmann\Hillel\Traits\EffectivelyStatic;
