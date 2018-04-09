@@ -1,8 +1,6 @@
 <?php
 
-
 namespace NRHoffmann\Hillel\Traits;
-
 
 use AssertionError;
 
@@ -17,7 +15,7 @@ trait EffectivelyStatic
      *
      * @throws \AssertionError
      */
-    private final function __construct()
+    final private function __construct()
     {
         throw new AssertionError('this shouldn\'t be called');
     }

@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class LuachTest extends TestCase
 {
-
     public function testIsLeapYear()
     {
         $this->assertTrue(Luach::isLeapYear(5774));

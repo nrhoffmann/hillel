@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class TarichTest extends TestCase
 {
-
     public function testMagicGetOnYear()
     {
         $tarich = Tarich::fromJewish(9, 3, 5776);
@@ -37,6 +36,7 @@ class TarichTest extends TestCase
         $tarich = Tarich::fromGorgarian(4, 3, 2018);
 
         $errorWasThrown = false;
+
         try {
             $this->assertEquals(2, $tarich->foo);
         } catch (Error $error) {
@@ -273,7 +273,8 @@ class TarichTest extends TestCase
         $this->assertTrue($tarich->isSheminiAzeret());
     }
 
-    public function testIsIsruChagSukkot() {
+    public function testIsIsruChagSukkot()
+    {
         $tarich1 = Tarich::fromJewish(1, 23, 5778);
         $tarich2 = Tarich::fromJewish(1, 24, 5778);
 
@@ -283,8 +284,9 @@ class TarichTest extends TestCase
         $this->assertFalse($tarich2->isIsruChagSukkot(false));
         $this->assertTrue($tarich2->isIsruChagSukkot());
     }
-    
-    public function testIsIsruChagPesach() {
+
+    public function testIsIsruChagPesach()
+    {
         $tarich1 = Tarich::fromJewish(8, 22, 5778);
         $tarich2 = Tarich::fromJewish(8, 23, 5778);
 
@@ -294,7 +296,7 @@ class TarichTest extends TestCase
         $this->assertFalse($tarich2->isIsruChagPesach(false));
         $this->assertTrue($tarich2->isIsruChagPesach());
     }
-    
+
     public function testIsHanukkahDay1()
     {
         $tarich = Tarich::fromJewish(3, 25, 5778);
@@ -420,7 +422,7 @@ class TarichTest extends TestCase
     public function testAddDay()
     {
         $tarich1 = Tarich::fromGorgarian(4, 9, 2018);
-        $tarich2 = Tarich::fromGorgarian(4, 10 , 2018);
+        $tarich2 = Tarich::fromGorgarian(4, 10, 2018);
 
         $tarich3 = $tarich1->addDay();
 
@@ -489,7 +491,6 @@ class TarichTest extends TestCase
 
         $this->assertTrue($tarich->isShavuotDay1());
     }
-
 
     public function testIsShavuotDay2()
     {

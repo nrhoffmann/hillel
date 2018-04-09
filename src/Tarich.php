@@ -1,11 +1,8 @@
 <?php
 
-
 namespace NRHoffmann\Hillel;
 
-use BadMethodCallException;
 use Error;
-use Exception;
 use NRHoffmann\Hillel\Constants\DayOfWeek;
 use NRHoffmann\Hillel\Constants\Month;
 
@@ -16,8 +13,6 @@ use NRHoffmann\Hillel\Constants\Month;
  * @property-read $month
  * @property-read $year
  * @property-read $dow
- *
- * @package NRHoffmann\Tarich
  */
 final class Tarich
 {
@@ -28,14 +23,14 @@ final class Tarich
         $this->daysPastJulianEpoch = $daysPastJulianEpoch;
     }
 
-    public static function fromJewish($month, $day, $year): Tarich
+    public static function fromJewish($month, $day, $year): self
     {
-        return new Tarich(jewishtojd($month, $day, $year));
+        return new self(jewishtojd($month, $day, $year));
     }
 
-    public static function fromGorgarian($month, $day, $year): Tarich
+    public static function fromGorgarian($month, $day, $year): self
     {
-        return new Tarich(gregoriantojd($month, $day, $year));
+        return new self(gregoriantojd($month, $day, $year));
     }
 
     /**
@@ -45,8 +40,9 @@ final class Tarich
      *
      * @param $name
      *
-     * @return mixed
      * @throws \Error
+     *
+     * @return mixed
      */
     public function __get($name)
     {
@@ -65,10 +61,10 @@ final class Tarich
 
     public function __toString()
     {
-        return join("-", [$this->month, $this->day, $this->year]);
+        return implode('-', [$this->month, $this->day, $this->year]);
     }
 
-    public function equals(Tarich $that): bool
+    public function equals(self $that): bool
     {
         return $this->daysPastJulianEpoch === $that->daysPastJulianEpoch;
     }
@@ -132,8 +128,8 @@ final class Tarich
 
     public function isTzomGedaliah(): bool
     {
-        # If the 3rd of Tishri falls out on Saturday, Tzom Gedaliah is postponed to Sunday.
-        if (Tarich::fromJewish(Month::TISHRI, 3, $this->year)->isSaturday()) {
+        // If the 3rd of Tishri falls out on Saturday, Tzom Gedaliah is postponed to Sunday.
+        if (self::fromJewish(Month::TISHRI, 3, $this->year)->isSaturday()) {
             return $this->month === Month::TISHRI
                 && $this->day === 4;
         }
@@ -165,7 +161,6 @@ final class Tarich
         return $this->month === Month::TISHRI
             && $this->day === 15;
     }
-
 
     public function isSukkotDay2(): bool
     {
@@ -223,7 +218,7 @@ final class Tarich
 
     private function isHanukkahDay(int $day): bool
     {
-        $before = Tarich::fromJewish(Month::KISLEV, 24, $this->year);
+        $before = self::fromJewish(Month::KISLEV, 24, $this->year);
 
         return $this->equals($before->addDays($day));
     }
@@ -306,8 +301,8 @@ final class Tarich
 
     public function isTanisEsther(): bool
     {
-        # If the 13th of Adar falls out on a Saturday, Tanis Esther occurs on the preceding Thursday
-        if (Tarich::fromJewish(Month::ADAR, 13, $this->year)->isSaturday()) {
+        // If the 13th of Adar falls out on a Saturday, Tanis Esther occurs on the preceding Thursday
+        if (self::fromJewish(Month::ADAR, 13, $this->year)->isSaturday()) {
             return $this->month === Month::ADAR
                 && $this->day === 11;
         }
@@ -324,18 +319,18 @@ final class Tarich
 
     public function isShushanPurim(): bool
     {
-        # INVESTIGATE: In some customs, Shushan Purim is postponed to Sunday if the 15th of Adar falls out on a Saturday.
+        // INVESTIGATE: In some customs, Shushan Purim is postponed to Sunday if the 15th of Adar falls out on a Saturday.
         return $this->month === Month::ADAR
             && $this->day === 15;
     }
 
     public function isShabbatHagadol(): bool
     {
-        $pesach = Tarich::fromJewish(Month::NISAN, 15, $this->year);
+        $pesach = self::fromJewish(Month::NISAN, 15, $this->year);
 
         while (($shabbatHagadol = $pesach->subDay())->dow !== DayOfWeek::SATURDAY) {
             // intentionally left empty
-        };
+        }
 
         return $this->equals($shabbatHagadol);
     }
@@ -351,7 +346,6 @@ final class Tarich
         return $this->month === Month::NISAN
             && $this->day === 15;
     }
-
 
     public function isPesachDay2(): bool
     {
@@ -373,7 +367,6 @@ final class Tarich
 
         return false;
     }
-
 
     public function isPesachDay7(): bool
     {
@@ -398,7 +391,7 @@ final class Tarich
             && $this->day === 22;
     }
 
-    # TODO: Israeli Holidays...
+    // TODO: Israeli Holidays...
 
     /*
      * Yom Hashoah
@@ -447,7 +440,6 @@ final class Tarich
             && $this->day === 6;
     }
 
-
     public function isShavuotDay2(): bool
     {
         return $this->month === Month::SIVAN
@@ -467,8 +459,8 @@ final class Tarich
 
     public function isTzomTammuz(): bool
     {
-        # If the 17th of Tammuz falls out on Saturday, Tzom Tammuz is postponed to Sunday.
-        if (Tarich::fromJewish(Month::TAMMUZ, 17, $this->year)->isSaturday()) {
+        // If the 17th of Tammuz falls out on Saturday, Tzom Tammuz is postponed to Sunday.
+        if (self::fromJewish(Month::TAMMUZ, 17, $this->year)->isSaturday()) {
             return $this->month === Month::TAMMUZ
                 && $this->day === 18;
         }
@@ -479,12 +471,11 @@ final class Tarich
 
     public function isTishaBAv(): bool
     {
-        # If the 9th of Av falls out on Saturday, Tisha B'Av is postponed to Sunday.
-        if (Tarich::fromJewish(Month::AV, 9, $this->year)->isSaturday()) {
+        // If the 9th of Av falls out on Saturday, Tisha B'Av is postponed to Sunday.
+        if (self::fromJewish(Month::AV, 9, $this->year)->isSaturday()) {
             return $this->month === Month::AV
                 && $this->day === 10;
         }
-
 
         return $this->month === Month::AV
             && $this->day === 9;
@@ -506,24 +497,24 @@ final class Tarich
     /////////////////////////////// Mutators ///////////////////////////////
     ////////////////////////////////////////////////////////////////////////
 
-    public function addDay(): Tarich
+    public function addDay(): self
     {
         return $this->addDays(1);
     }
 
-    public function addDays($days): Tarich
+    public function addDays($days): self
     {
         $this->daysPastJulianEpoch += $days;
 
         return $this;
     }
 
-    public function subDay(): Tarich
+    public function subDay(): self
     {
         return $this->subDays(1);
     }
 
-    public function subDays($days): Tarich
+    public function subDays($days): self
     {
         return $this->addDays(-$days);
     }
